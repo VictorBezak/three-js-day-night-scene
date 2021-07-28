@@ -11,20 +11,21 @@ camera.position.set(1, 1.5, 6)
 const ambientLight = new THREE.AmbientLight('#f5f3ce', 0.3)
 const moonLight = new THREE.DirectionalLight('#f5f3ce', 1)
 moonLight.castShadow = true
+moonLight.intensity = 0.25;
+
 const sunLight = new THREE.DirectionalLight('#fdfbd3', 1)
 sunLight.castShadow = true
+sunLight.intensity = 0.8;
 
 // Groups
 const stars = new THREE.Group()
-stars.add(mesh.moon, mesh.sun)
+stars.add(mesh.moon, mesh.sun, moonLight, sunLight)
 
 // Scene
 const scene = new THREE.Scene()
 scene.add(
   camera,
   ambientLight,
-  moonLight,
-  sunLight,
   mesh.ground,
   mesh.house,
   stars
@@ -42,15 +43,16 @@ renderer.shadowMap.enabled = true
 const clock = new THREE.Clock()
 
 function rotateStars(elapsed) {
-  const x = Math.sin(elapsed) * 3
-  const y = Math.cos(elapsed) * 3
-  const z = Math.cos(elapsed)
-
-  sunLight.intensity = 0.8;
+  // const x = Math.sin(elapsed) * 3
+  // const y = Math.cos(elapsed) * 3
+  // const z = Math.cos(elapsed)
+  const x = isDay ? 2 : -2
+  const y = isDay ? 2 : -2
+  const z = 0
+  
   sunLight.position.set(x, y, z)
   mesh.sun.position.set(x, y, z)
   
-  moonLight.intensity = 0.25;
   moonLight.position.set(-x, -y, -z)
   mesh.moon.position.set(-x, -y, -z)
 }
@@ -58,14 +60,20 @@ function rotateStars(elapsed) {
 function tick() {
   const elapsedTime = clock.getElapsedTime()
   rotateStars(elapsedTime)
-  // camera.position.x = Math.cos(elapsedTime / 2) * 3
-  // camera.position.z = Math.sin(elapsedTime / 2) * 3
+  
+  camera.position.x = Math.cos(elapsedTime / 2) * 4
+  camera.position.z = Math.sin(elapsedTime / 2) * 4
   camera.lookAt(mesh.house.position)
 
   renderer.render(scene, camera)
 
   window.requestAnimationFrame(tick)
 }
+
+let isDay = true;
+
+document.getElementById('day-night-btn')
+  .addEventListener('click', () => isDay = !isDay)
 
 tick()
 
