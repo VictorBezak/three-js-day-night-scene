@@ -6,6 +6,28 @@
 
 canvas.webgl {
   position: absolute;
+  z-index: -5;
   top: 0;
   left: 0;
+}
+
+#day-night-btn {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  /* font-family: 'Roboto Mono', monospace; */
+  font-weight: 600;
+  font-size: 1.25rem;
+  border-radius: 50%;
+  height: 8rem;
+  width: 8rem;
+  background-color: white;
+  color: darkslategray;
+  border: solid black 3px;
+}
+
+#day-night-btn:hover {
+  color: black;
+  border-color: slategray;
+  cursor: pointer;
 }
